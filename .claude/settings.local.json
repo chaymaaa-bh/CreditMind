@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd \"C:\\\\Users\\\\Rahma Moalla\\\\Desktop\\\\CreditMind\\\\datta-nettoyer\"; $env:PYTHONIOENCODING = \"utf-8\"; python m3_time_series.py 2>&1)",
+      "PowerShell(cd \"C:\\\\Users\\\\Rahma Moalla\\\\Desktop\\\\CreditMind\\\\datta-nettoyer\"; $env:PYTHONIOENCODING = \"utf-8\"; python m4_anomaly_detection.py 2>&1)",
+      "PowerShell(cd \"C:\\\\Users\\\\Rahma Moalla\\\\Desktop\\\\CreditMind\\\\datta-nettoyer\"; $env:PYTHONIOENCODING=\"utf-8\"; python nettoyer_data.py 2>&1)",
+      "PowerShell($content = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\Rahma Moalla\\\\Desktop\\\\CreditMind\\\\datta-nettoyer\\\\m2_gnn.py\"\\); $text = [System.Text.Encoding]::UTF8.GetString\\($content\\); $idx = $text.IndexOf\\(\"aggregate_neighbors\"\\); Write-Output $text.Substring\\($idx-5, 300\\))",
+      "PowerShell($content = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\Rahma Moalla\\\\Desktop\\\\CreditMind\\\\datta-nettoyer\\\\m2_gnn.py\"\\); $text = [System.Text.Encoding]::UTF8.GetString\\($content\\); $idx = $text.IndexOf\\(\"aggregate_neighbors\"\\); $chunk = $text.Substring\\($idx-5, 400\\); [System.Text.RegularExpressions.Regex]::Replace\\($chunk, \".\", { param\\($m\\) if \\($m.Value -match \"[\\\\x00-\\\\x1f\\\\x7f-\\\\xff]\"\\) { \"[\" + [int][char]$m.Value + \"]\" } else { $m.Value } }\\))"
+    ]
+  }
+}
