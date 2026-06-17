@@ -109,3 +109,13 @@ coverage.xml
 /tmp
 .dvc/cache/
 .dvc/tmp/
+
+# ── Artefacts M5 versionnés (exceptions aux règles globales) ──
+!m5_xgb_model.joblib
+!m5_lgb_model.joblib
+!m5_scaler.joblib
+!m5_feature_cols.json
+!m5_shap_importance.csv
+!m5_scores_finaux.csv
+!m4_anomaly_scores.csv
+!m3_forecasts_individual.csv

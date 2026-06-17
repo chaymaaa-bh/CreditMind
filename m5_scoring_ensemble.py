@@ -1,6 +1,4 @@
 # =============================================================
-
-
 #  CreditMind — M5 : Scoring Ensemble & MLOps
 #
 #  INSTRUCTIONS :
@@ -31,6 +29,7 @@
 import pandas as pd
 import numpy as np
 import os, warnings, json, time, hashlib
+import joblib
 from datetime import datetime
 warnings.filterwarnings('ignore')
 
@@ -47,6 +46,10 @@ OUTPUT_DRIFT    = r'm5_drift_report.html'
 OUTPUT_EXCEL    = r'm5_results_summary.xlsx'
 MLFLOW_DIR      = r'mlruns'
 DVC_HASH_FILE   = r'm5_data_hash.json'
+OUTPUT_XGB      = r'm5_xgb_model.joblib'
+OUTPUT_LGB      = r'm5_lgb_model.joblib'
+OUTPUT_SCALER   = r'm5_scaler.joblib'
+OUTPUT_FEATURES = r'm5_feature_cols.json'
 
 # ─── PARAMÈTRES ───────────────────────────────────────────────────────────────
 TEST_SIZE       = 0.20
@@ -302,6 +305,11 @@ X_val_s   = scaler_m5.transform(X_val)
 X_test_s  = scaler_m5.transform(X_test)
 X_all_s   = scaler_m5.transform(X)
 
+joblib.dump(scaler_m5, OUTPUT_SCALER)
+with open(OUTPUT_FEATURES, 'w') as _f:
+    json.dump(FEATURE_COLS, _f)
+print(f"  Scaler + feature list sauvegardés ({OUTPUT_SCALER}, {OUTPUT_FEATURES})")
+
 # ══════════════════════════════════════════════════════════════════════
 # ÉTAPE 4 — MLflow : initialisation du tracking
 # ══════════════════════════════════════════════════════════════════════
@@ -402,7 +410,8 @@ try:
         mlflow.xgboost.log_model(xgb_model, "xgboost_model")
         mlflow.end_run()
 
-    print(f"    Entraîné en {elapsed_xgb:.1f}s")
+    joblib.dump(xgb_model, OUTPUT_XGB)
+    print(f"    Entraîné en {elapsed_xgb:.1f}s — sauvegardé → {OUTPUT_XGB}")
 
 except ImportError:
     print("  XGBoost non disponible — pip install xgboost")
@@ -444,7 +453,8 @@ try:
         mlflow.sklearn.log_model(lgb_model, "lightgbm_model")
         mlflow.end_run()
 
-    print(f"    Entraîné en {elapsed_lgb:.1f}s")
+    joblib.dump(lgb_model, OUTPUT_LGB)
+    print(f"    Entraîné en {elapsed_lgb:.1f}s — sauvegardé → {OUTPUT_LGB}")
 
 except ImportError:
     print("  LightGBM non disponible — pip install lightgbm")
