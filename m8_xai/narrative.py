@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import os
-from typing import Any
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 _CLIENT = None
 
@@ -10,7 +14,7 @@ def _get_client():
     global _CLIENT
     if _CLIENT is None:
         import anthropic
-        _CLIENT = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        _CLIENT = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
     return _CLIENT
 
 
