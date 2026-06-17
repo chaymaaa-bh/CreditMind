@@ -105,7 +105,6 @@ if os.path.exists(INPUT_M2):
         'score_gnn':      'gnn_risk_score',
         'score_contagion':'contagion_score',
         'score_final_m2': 'gnn_final_score',
-        'label_reel':     'gnn_risk_label',
     })
     if 'client_id' not in df_m2.columns:
         df_m2['client_id'] = df_m2.index
@@ -113,7 +112,7 @@ if os.path.exists(INPUT_M2):
     for col in ['gnn_risk_score', 'contagion_score', 'gnn_final_score']:
         if col in df_m2.columns:
             df_m2[col] = df_m2[col] / 100.0
-    m2_cols = [c for c in ['gnn_risk_score', 'contagion_score', 'gnn_final_score', 'gnn_risk_label']
+    m2_cols = [c for c in ['gnn_risk_score', 'contagion_score', 'gnn_final_score']
                if c in df_m2.columns]
     print(f"  M2 (GNN)    : {len(df_m2)} lignes · colonnes : {m2_cols}")
 else:
@@ -123,9 +122,8 @@ else:
         'gnn_risk_score': np.random.beta(2, 8, len(df_base)),
         'contagion_score':np.random.beta(1, 9, len(df_base)),
         'gnn_final_score':np.random.beta(2, 8, len(df_base)),
-        'gnn_risk_label': df_base.get('label_risque', pd.Series(np.zeros(len(df_base)))).values,
     })
-    m2_cols = ['gnn_risk_score', 'contagion_score', 'gnn_final_score', 'gnn_risk_label']
+    m2_cols = ['gnn_risk_score', 'contagion_score', 'gnn_final_score']
 
 # ── M3 : prévisions (horizon 1 et 3 mois) ─────────────────────────────
 if os.path.exists(INPUT_M3):
@@ -149,14 +147,13 @@ if os.path.exists(INPUT_M3):
 else:
     print("  M3 non disponible → simulation des prévisions")
     n = len(df_base)
-    label = df_base.get('label_risque', pd.Series(np.zeros(n))).values
     df_m3 = pd.DataFrame({
         'client_id':      df_base['client_id'],
         'm3_montant_h1':  np.random.normal(10000, 3000, n).clip(0),
-        'm3_retard_h1':   np.abs(np.random.normal(5, 8, n) + label * 15),
-        'm3_tendance_h1': np.random.normal(0, 0.1, n) + label * 0.15,
+        'm3_retard_h1':   np.abs(np.random.normal(5, 8, n)),
+        'm3_tendance_h1': np.random.normal(0, 0.1, n),
         'm3_montant_h3':  np.random.normal(9500, 4000, n).clip(0),
-        'm3_retard_h3':   np.abs(np.random.normal(6, 10, n) + label * 20),
+        'm3_retard_h3':   np.abs(np.random.normal(6, 10, n)),
     })
 
 # ── M4 : scores d'anomalie ────────────────────────────────────────────
@@ -172,15 +169,13 @@ if os.path.exists(INPUT_M4):
 else:
     print("  M4 non disponible → simulation des scores d'anomalie")
     n = len(df_base)
-    label = df_base.get('label_risque', pd.Series(np.zeros(n))).values
     df_m4 = pd.DataFrame({
         'client_id':            df_base['client_id'],
-        'score_anomalie_final': np.clip(np.random.beta(1, 9, n) + label * 0.4, 0, 1),
-        'score_anomalie_if':    np.clip(np.random.beta(1, 9, n) + label * 0.3, 0, 1),
-        'score_anomalie_lstm':  np.clip(np.random.beta(1, 9, n) + label * 0.35, 0, 1),
-        'pred_ensemble':        label,
+        'score_anomalie_final': np.clip(np.random.beta(1, 9, n), 0, 1),
+        'score_anomalie_if':    np.clip(np.random.beta(1, 9, n), 0, 1),
+        'score_anomalie_lstm':  np.clip(np.random.beta(1, 9, n), 0, 1),
     })
-    m4_cols = ['score_anomalie_final', 'score_anomalie_if', 'score_anomalie_lstm', 'pred_ensemble']
+    m4_cols = ['score_anomalie_final', 'score_anomalie_if', 'score_anomalie_lstm']
 
 # ── Fusion complète ────────────────────────────────────────────────────
 BASE_COLS = [

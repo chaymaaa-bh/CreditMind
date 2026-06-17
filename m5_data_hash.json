@@ -1,8 +1,8 @@
 {
-  "run_timestamp": "2026-06-17T15:40:11.550290",
-  "dataset_hash_md5": "4cd8b95756f8717e160ebd311a4d95a4",
+  "run_timestamp": "2026-06-17T16:39:43.792916",
+  "dataset_hash_md5": "cd351b9c6c1cabe38eaf4d42ea79c1c7",
   "n_clients": 21637,
-  "n_features": 32,
+  "n_features": 31,
   "features": [
     "nb_factures",
     "montant_ttc_moyen",
@@ -19,7 +19,6 @@
     "gnn_risk_score",
     "contagion_score",
     "gnn_final_score",
-    "gnn_risk_label",
     "m3_montant_h1",
     "m3_retard_h1",
     "m3_tendance_h1",
