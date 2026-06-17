@@ -37,7 +37,8 @@ def run(state: CreditMindState) -> dict:
 
 def _run(state: CreditMindState) -> dict:
     p   = state["profil_brut"]
-    cid = int(p["client_id"])
+    raw = p["client_id"]
+    cid = int(raw.split("_")[-1]) if "_" in raw else int(raw)
     m5  = _get_m5_index().get(cid)
 
     # ── Signaux comportementaux depuis ProfilBrut (toujours disponibles) ──────
