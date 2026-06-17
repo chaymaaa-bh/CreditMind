@@ -7,7 +7,7 @@ import operator
 class ProfilBrut(TypedDict):
     client_id:          str
     source:             str    # "REEL" | "SYNTHETIQUE"
-    alerte_m2:          str    # "VERT" | "ORANGE" | "ROUGE"
+    alerte_m2:          str    # "VERT" | "JAUNE" | "ORANGE" | "ROUGE"
     score_final_m2:     float
     score_gnn:          float
     score_contagion:    float
@@ -23,11 +23,12 @@ class ProfilBrut(TypedDict):
 
 
 class SortieComportement(TypedDict):
-    score:         float
-    niveau:        str            # "VERT" | "ORANGE" | "ROUGE"
-    signaux:       list[str]
-    features_cles: dict[str, float]
-    is_mock:       bool
+    score:          float
+    niveau:         str            # "VERT" | "JAUNE" | "ORANGE" | "ROUGE"
+    signaux:        list[str]
+    features_cles:  dict[str, float]
+    modele_utilise: str
+    is_mock:        bool
 
 
 class SortieReseau(TypedDict):
@@ -51,11 +52,11 @@ class SortieForecast(TypedDict):
 
 
 class SortieAnomalies(TypedDict):
-    score_anomalie:     float
-    est_outlier:        bool
-    type_anomalie:      str | None
+    score_anomalie:      float
+    est_outlier:         bool
+    type_anomalie:       str | None
     features_aberrantes: list[str]
-    is_mock:            bool
+    is_mock:             bool
 
 
 class SortieCompliance(TypedDict):
@@ -97,8 +98,8 @@ class CreditMindState(TypedDict):
     compliance:   SortieCompliance   | None
 
     # ── Sorties des agents séquentiels ────────────────────────────
-    raisonnement: SortieRaisonnement | None
-    rapport_final: RapportFinal      | None
+    raisonnement:  SortieRaisonnement | None
+    rapport_final: RapportFinal       | None
 
     # ── Métadonnées (accumulées par reducer) ──────────────────────
     agents_completes: Annotated[list[str], operator.add]
