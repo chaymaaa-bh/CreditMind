@@ -22,6 +22,8 @@ SENSITIVITES: dict[str, float] = {
     "retard_moyen_jours":  0.15,  # +1 j → +0.15 pt
     "retard_max_jours":    0.08,  # +1 j → +0.08 pt (R02 : max > 30 j → label=1)
     "nb_retards_graves":   2.0,   # +1   → +2 pts
+    "ratio_avoirs":       10.0,   # +1.0 → +10 pts  (avoirs élevés = litiges/retours)
+    "montant_ttc_moyen":   0.0001, # +1 000 TND → +0.1 pt (exposition facture)
 }
 
 
@@ -86,6 +88,7 @@ def load_clients(params: ScenarioParams) -> list[dict[str, Any]]:
       c.taux_retard        AS taux_retard,
       c.ratio_encaissement AS ratio_encaissement,
       c.montant_ttc_moyen  AS montant_ttc_moyen,
+      c.ratio_avoirs       AS ratio_avoirs,
       c.montant_ttc_total  AS montant_ttc_total,
       c.nb_factures        AS nb_factures,
       c.anciennete_jours   AS anciennete_jours,
@@ -109,6 +112,7 @@ def load_clients(params: ScenarioParams) -> list[dict[str, Any]]:
             "taux_retard":        float(r.get("taux_retard") or 0),
             "ratio_encaissement": float(r.get("ratio_encaissement") or 0),
             "montant_ttc_moyen":  float(r.get("montant_ttc_moyen") or 0),
+            "ratio_avoirs":       float(r.get("ratio_avoirs") or 0),
             "montant_ttc_total":  float(r.get("montant_ttc_total") or 0),
             "nb_factures":        int(r.get("nb_factures") or 0),
             "anciennete_jours":   int(r.get("anciennete_jours") or 0),
@@ -174,7 +178,7 @@ def run_simulation(
     for f in ("taux_retard", "ratio_encaissement", "ratio_avoirs"):
         if f in feat:
             feat[f] = np.clip(feat[f], 0.0, 1.0)
-    for f in ("retard_moyen_jours", "retard_max_jours", "nb_retards_graves"):
+    for f in ("retard_moyen_jours", "retard_max_jours", "nb_retards_graves", "montant_ttc_moyen"):
         if f in feat:
             feat[f] = np.maximum(feat[f], 0.0)
 

@@ -83,8 +83,8 @@ def generate_report(
     chunks: list[str] = []
     with anth.messages.stream(
         model=model,
-        max_tokens=4096,
-        thinking={"type": "adaptive"},
+        max_tokens=10000,
+        thinking={"type": "enabled", "budget_tokens": 5000},
         system=_SYSTEM,
         messages=[{"role": "user", "content": prompt}],
     ) as stream:
