@@ -49,3 +49,61 @@ class ClientListResponse(BaseModel):
     limit: int
     pages: int
     items: list[ClientListItem]
+
+
+# ── Client Detail (M8) ────────────────────────────────────────────────────────
+
+class ShapFeature(BaseModel):
+    feature: str
+    label: str
+    shap_value: float
+    feature_value: float
+    direction: str  # "aggrave" | "ameliore"
+
+
+class ShapResult(BaseModel):
+    base_value: float
+    top_features: list[ShapFeature]
+
+
+class CfSuggestion(BaseModel):
+    feature: str
+    label: str
+    valeur_actuelle: float
+    valeur_cible: float
+    effort_pct: float
+    reduction_prob: float
+    nouvelle_prob: float
+    atteint_seuil: bool
+
+
+class CounterfactualResult(BaseModel):
+    current_prob: float
+    target_prob: float
+    suggestions: list[CfSuggestion]
+    seuil_atteignable: bool
+    note: Optional[str] = None
+    message: Optional[str] = None
+    method: str = "manual"
+
+
+class AlertResult(BaseModel):
+    niveau_alerte: str
+    triggers: list[str]
+    score_solvabilite: float
+    prob_defaut: float
+    score_anomalie: float
+    gnn_risk_score: float
+    tendance_m3: float
+    alerte_m5: str
+
+
+class ClientDetail(BaseModel):
+    client_id: int
+    neo4j_id: str
+    gouvernorat: Optional[str] = None
+    segment: Optional[str] = None
+    alert: AlertResult
+    shap: ShapResult
+    counterfactual: CounterfactualResult
+    narrative: Optional[str] = None

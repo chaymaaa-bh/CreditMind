@@ -2,6 +2,7 @@ import type {
   ClientListResponse,
   GovernorateStats,
   PortfolioSummary,
+  ClientDetail,
 } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -31,5 +32,9 @@ export const api = {
       });
       return get<ClientListResponse>(`/api/portfolio/clients?${qs}`);
     },
+  },
+  client: {
+    detail: (id: string, withNarrative = false) =>
+      get<ClientDetail>(`/api/client/${encodeURIComponent(id)}${withNarrative ? "?with_narrative=true" : ""}`),
   },
 };

@@ -47,3 +47,61 @@ export interface ClientListResponse {
   pages: number;
   items: ClientListItem[];
 }
+
+// ── Client Detail ────────────────────────────────────────────────────────────
+
+export interface ShapFeature {
+  feature: string;
+  label: string;
+  shap_value: number;
+  feature_value: number;
+  direction: "aggrave" | "ameliore";
+}
+
+export interface ShapResult {
+  base_value: number;
+  top_features: ShapFeature[];
+}
+
+export interface CfSuggestion {
+  feature: string;
+  label: string;
+  valeur_actuelle: number;
+  valeur_cible: number;
+  effort_pct: number;
+  reduction_prob: number;
+  nouvelle_prob: number;
+  atteint_seuil: boolean;
+}
+
+export interface CounterfactualResult {
+  current_prob: number;
+  target_prob: number;
+  suggestions: CfSuggestion[];
+  seuil_atteignable: boolean;
+  note?: string;
+  message?: string;
+  method: string;
+}
+
+export interface AlertResult {
+  niveau_alerte: RiskLevel;
+  triggers: string[];
+  score_solvabilite: number;
+  prob_defaut: number;
+  score_anomalie: number;
+  gnn_risk_score: number;
+  tendance_m3: number;
+  alerte_m5: string;
+}
+
+export interface ClientDetail {
+  client_id: number;
+  neo4j_id: string;
+  gouvernorat?: string;
+  segment?: string;
+  alert: AlertResult;
+  shap: ShapResult;
+  counterfactual: CounterfactualResult;
+  narrative?: string;
+}
