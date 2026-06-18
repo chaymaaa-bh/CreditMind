@@ -22,5 +22,10 @@ def _get_driver():
 
 def run_cypher(cypher: str, params: dict | None = None) -> list[dict]:
     database = os.getenv("NEO4J_DATABASE", "neo4j")
-    with _get_driver().session(database=database) as session:
-        return [dict(r) for r in session.run(cypher, params or {})]
+    try:
+        with _get_driver().session(database=database) as session:
+            return [dict(r) for r in session.run(cypher, params or {})]
+    except ValueError:
+        raise
+    except Exception as exc:
+        raise ValueError(f"Neo4j indisponible : {exc}") from exc
