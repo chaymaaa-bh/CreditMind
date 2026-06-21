@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.services import data_store
-from backend.routers import portfolio, client
+from backend.routers import portfolio, client, agents, stress, network
 
 
 @asynccontextmanager
@@ -31,6 +31,9 @@ app.add_middleware(
 
 app.include_router(portfolio.router, prefix="/api")
 app.include_router(client.router, prefix="/api")
+app.include_router(agents.router, prefix="/api")
+app.include_router(stress.router, prefix="/api")
+app.include_router(network.router, prefix="/api")
 
 
 @app.get("/health")

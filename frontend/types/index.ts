@@ -105,3 +105,124 @@ export interface ClientDetail {
   counterfactual: CounterfactualResult;
   narrative?: string;
 }
+
+// ── M7 Agents ────────────────────────────────────────────────────────────────
+
+export interface AgentsResult {
+  client_id: string;
+  decision: string;
+  score_global: number;
+  alerte_finale: string;
+  rapport_narratif: string;
+  actions_recommandees: string[];
+  horizon_reevaluation: string;
+  score_consensus: number;
+  niveau_confiance: string;
+  agents_mock: string[];
+  agents_completes: string[];
+  erreurs: string[];
+  comportement: {
+    score: number;
+    niveau: string;
+    signaux: string[];
+    is_mock: boolean;
+  };
+  reseau: {
+    score_gnn: number;
+    score_contagion: number;
+    score_final_m2: number;
+    alerte: string;
+    nb_voisins_total: number;
+    nb_voisins_rouge: number;
+    voisins_top5: Array<{ client_id: string; alerte: string; score_m2: number; type_lien: string }>;
+    is_mock: boolean;
+  };
+  forecast: {
+    tendance: string;
+    probabilite_defaut_6m: number;
+    predictions_score: Record<string, number>;
+    mois_alerte_prevu: number | null;
+    is_mock: boolean;
+  };
+  anomalies: {
+    score_anomalie: number;
+    est_outlier: boolean;
+    type_anomalie: string | null;
+    features_aberrantes: string[];
+    is_mock: boolean;
+  };
+  compliance: {
+    rapport_client: string;
+    concepts_declenches: string[];
+    is_mock: boolean;
+  };
+}
+
+// ── M9 Stress Testing ────────────────────────────────────────────────────────
+
+export interface StressIndicateurs {
+  nb_clients_analyses: number;
+  nb_clients_bascule_rouge: number;
+  pct_bascule_rouge: number;
+  delta_score_moyen: number;
+  encours_a_risque_stresse: number;
+  delta_retard_moyen_jours: number;
+  provision_recommandee: number;
+  distribution_avant: Record<string, number>;
+  distribution_apres: Record<string, number>;
+  clients_les_plus_impactes: Array<{
+    client_id: string;
+    gouvernorat: string;
+    segment: string;
+    alerte_baseline: string;
+    alerte_stresse: string;
+    score_baseline: number;
+    score_stresse: number;
+    encours_tnd: number;
+  }>;
+  ic95_EaRS: [number, number];
+}
+
+export interface StressResult {
+  scenario: {
+    description: string;
+    categorie: string;
+    intensite: string;
+    duree_mois: number;
+    gouvernorats_cibles: string[];
+    segments_cibles: string[];
+    feature_deltas: Array<{
+      feature: string;
+      delta_type: string;
+      delta_value: number;
+      std_pct: number;
+    }>;
+  };
+  indicateurs: StressIndicateurs;
+  rapport: string;
+  contagion: null | {
+    nb_contamines: number;
+    encours_cumule: number;
+    vagues: Array<{ niveau: number; clients: string[] }>;
+  };
+}
+
+// ── M2 Network ───────────────────────────────────────────────────────────────
+
+export interface NetworkNode {
+  client_id: number;
+  neo4j_id: string;
+  alerte: RiskLevel;
+  score_m2: number;
+  prob_defaut: number;
+  gouvernorat?: string;
+  segment?: string;
+  is_center: boolean;
+}
+
+export interface NetworkGraph {
+  center: NetworkNode;
+  neighbors: NetworkNode[];
+  total_gouvernorat: number;
+  lien_type: string;
+}

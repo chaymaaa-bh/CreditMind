@@ -107,3 +107,49 @@ class ClientDetail(BaseModel):
     shap: ShapResult
     counterfactual: CounterfactualResult
     narrative: Optional[str] = None
+
+
+# ── M7 Agents ────────────────────────────────────────────────────────────────
+
+class AgentsResult(BaseModel):
+    client_id: str
+    decision: str
+    score_global: float
+    alerte_finale: str
+    rapport_narratif: str
+    actions_recommandees: list[str]
+    horizon_reevaluation: str
+    score_consensus: float
+    niveau_confiance: str
+    agents_mock: list[str]
+    agents_completes: list[str]
+    erreurs: list[str]
+    comportement: dict
+    reseau: dict
+    forecast: dict
+    anomalies: dict
+    compliance: dict
+
+
+# ── M9 Stress Testing ─────────────────────────────────────────────────────────
+# (response_model=dict — le schéma complet est dans StressRequest/StressResponse)
+
+
+# ── M2 Network ───────────────────────────────────────────────────────────────
+
+class NetworkNode(BaseModel):
+    client_id: int
+    neo4j_id: str
+    alerte: str
+    score_m2: float
+    prob_defaut: float
+    gouvernorat: Optional[str] = None
+    segment: Optional[str] = None
+    is_center: bool = False
+
+
+class NetworkGraph(BaseModel):
+    center: NetworkNode
+    neighbors: list[NetworkNode]
+    total_gouvernorat: int
+    lien_type: str
