@@ -6,6 +6,10 @@ import type {
   AgentsResult,
   StressResult,
   NetworkGraph,
+  PortfolioForecastPoint,
+  ClientForecastResponse,
+  AnomalySummary,
+  AnomalyListResponse,
 } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -60,5 +64,20 @@ export const api = {
   network: {
     graph: (id: string, limit = 30) =>
       get<NetworkGraph>(`/api/network/${encodeURIComponent(id)}?limit=${limit}`),
+  },
+  forecast: {
+    portfolio: () => get<PortfolioForecastPoint[]>("/api/forecast/portfolio"),
+    client: (id: number) => get<ClientForecastResponse>(`/api/forecast/client/${id}`),
+    topAlerts: (limit = 20) => get<Record<string, number | string>[]>(`/api/forecast/alerts/top?limit=${limit}`),
+  },
+  anomalies: {
+    summary: () => get<AnomalySummary>("/api/anomalies/summary"),
+    list: (params: { page?: number; limit?: number; alerte?: string; q?: string; sort_by?: string; sort_dir?: string }) => {
+      const qs = new URLSearchParams();
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== "") qs.set(k, String(v));
+      });
+      return get<AnomalyListResponse>(`/api/anomalies/list?${qs}`);
+    },
   },
 };

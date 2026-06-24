@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Link from "next/link";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -11,11 +12,14 @@ export const metadata: Metadata = {
 };
 
 const navLinks = [
-  { href: "/portfolio", label: "Portefeuille", icon: "◈" },
-  { href: "/client", label: "Client", icon: "◉" },
-  { href: "/agents", label: "Analyse M7", icon: "◎" },
-  { href: "/stress", label: "Stress Test", icon: "◇" },
-  { href: "/network", label: "Réseau", icon: "◈" },
+  { href: "/portfolio", label: "Portefeuille" },
+  { href: "/client", label: "Clients" },
+  { href: "/forecast", label: "Prévisions M3" },
+  { href: "/anomalies", label: "Anomalies M4" },
+  { href: "/agents", label: "Agents M7" },
+  { href: "/stress", label: "Stress M9" },
+  { href: "/network", label: "Réseau GNN" },
+  { href: "/graphrag", label: "GraphRAG M6" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -81,7 +85,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </nav>
 
         {/* Page content */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </main>
       </body>
     </html>
   );

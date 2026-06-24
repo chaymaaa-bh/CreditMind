@@ -207,6 +207,69 @@ export interface StressResult {
   };
 }
 
+// ── M3 Forecast ──────────────────────────────────────────────────────────────
+
+export interface PortfolioForecastPoint {
+  horizon_mois: number;
+  retard_moyen_prevu: number;
+  retard_lower_80: number;
+  retard_upper_80: number;
+  montant_regle_total_prevu: number;
+  ratio_regle_portf_prevu: number;
+  encours_total_prevu: number;
+}
+
+export interface ClientForecastPoint {
+  horizon_mois: number;
+  montant_regle_pred: number;
+  lower_80: number;
+  upper_80: number;
+  retard_pred: number;
+  risque_tendance: number;
+  alerte_prev: string;
+}
+
+export interface ClientForecastResponse {
+  client_id: number;
+  model: string;
+  points: ClientForecastPoint[];
+}
+
+// ── M4 Anomalies ─────────────────────────────────────────────────────────────
+
+export interface AnomalySummary {
+  total: number;
+  nb_rouge: number;
+  nb_orange: number;
+  nb_jaune: number;
+  avg_score_final: number;
+  avg_score_if: number;
+  avg_score_lstm: number;
+}
+
+export interface AnomalyAlert {
+  client_id: number;
+  alerte: string;
+  score_anomalie_final: number;
+  score_anomalie_if: number;
+  score_anomalie_lstm: number;
+  score_anomalie_river: number;
+  nb_votes: number;
+  raison_principale: string;
+  retard_moyen_jours: number;
+  taux_retard: number;
+  ratio_encaissement: number;
+  montant_ttc_moyen: number;
+}
+
+export interface AnomalyListResponse {
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+  items: AnomalyAlert[];
+}
+
 // ── M2 Network ───────────────────────────────────────────────────────────────
 
 export interface NetworkNode {

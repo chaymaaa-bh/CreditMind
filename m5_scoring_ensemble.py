@@ -53,11 +53,13 @@ OUTPUT_FEATURES = r'm5_feature_cols.json'
 
 # ─── PARAMÈTRES ───────────────────────────────────────────────────────────────
 TEST_SIZE       = 0.20
+
 VAL_SIZE        = 0.10
 RANDOM_SEED     = 42
 XGB_PARAMS = {
     'n_estimators':     500,
     'max_depth':        6,
+
     'learning_rate':    0.05,
     'subsample':        0.8,
     'colsample_bytree': 0.8,

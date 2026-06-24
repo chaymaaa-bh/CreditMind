@@ -60,7 +60,12 @@ def run_agents(raw_id: str) -> AgentsResult:
     }
 
     try:
-        result = graph.invoke(initial)
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(graph.invoke, initial)
+            result = future.result(timeout=120)
+    except concurrent.futures.TimeoutError:
+        raise HTTPException(status_code=504, detail="M7 timeout après 120s — réessayez")
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 

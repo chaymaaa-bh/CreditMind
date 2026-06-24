@@ -135,6 +135,69 @@ class AgentsResult(BaseModel):
 # (response_model=dict — le schéma complet est dans StressRequest/StressResponse)
 
 
+# ── M3 Forecast ──────────────────────────────────────────────────────────────
+
+class PortfolioForecastPoint(BaseModel):
+    horizon_mois: int
+    retard_moyen_prevu: float
+    retard_lower_80: float
+    retard_upper_80: float
+    montant_regle_total_prevu: float
+    ratio_regle_portf_prevu: float
+    encours_total_prevu: float
+
+
+class ClientForecastPoint(BaseModel):
+    horizon_mois: int
+    montant_regle_pred: float
+    lower_80: float
+    upper_80: float
+    retard_pred: float
+    risque_tendance: float
+    alerte_prev: str
+
+
+class ClientForecastResponse(BaseModel):
+    client_id: int
+    model: str
+    points: list[ClientForecastPoint]
+
+
+# ── M4 Anomalies ─────────────────────────────────────────────────────────────
+
+class AnomalySummary(BaseModel):
+    total: int
+    nb_rouge: int
+    nb_orange: int
+    nb_jaune: int
+    avg_score_final: float
+    avg_score_if: float
+    avg_score_lstm: float
+
+
+class AnomalyAlert(BaseModel):
+    client_id: int
+    alerte: str
+    score_anomalie_final: float
+    score_anomalie_if: float
+    score_anomalie_lstm: float
+    score_anomalie_river: float
+    nb_votes: int
+    raison_principale: str
+    retard_moyen_jours: float
+    taux_retard: float
+    ratio_encaissement: float
+    montant_ttc_moyen: float
+
+
+class AnomalyListResponse(BaseModel):
+    total: int
+    page: int
+    limit: int
+    pages: int
+    items: list[AnomalyAlert]
+
+
 # ── M2 Network ───────────────────────────────────────────────────────────────
 
 class NetworkNode(BaseModel):
